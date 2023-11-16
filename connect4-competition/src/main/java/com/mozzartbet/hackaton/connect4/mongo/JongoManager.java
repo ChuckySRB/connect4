@@ -24,8 +24,7 @@ public class JongoManager {
 
 		@SuppressWarnings("deprecation")
 		JongoHolder() {
-			client = new MongoClient(new ServerAddress("localhost", 27017),
-					asList(createCredential("root", "admin", "root!".toCharArray())));
+			client = new MongoClient(new ServerAddress("localhost", 27017));
 			db = client.getDB(DB_NAME);
 			jongo = new Jongo(db,
 					new JacksonMapper.Builder()

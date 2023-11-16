@@ -1,4 +1,4 @@
-package com.mozzartbet.hackaton.connect4.bot.abi;
+package com.mozzartbet.hackaton.connect4.bot.abii;
 
 import static com.mozzartbet.hackaton.connect4.model.Direction.E;
 import static com.mozzartbet.hackaton.connect4.model.Direction.NE;

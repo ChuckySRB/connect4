@@ -20,31 +20,30 @@ public class CompetitionStagesTest {
 	final CompetitionService competitionService = new CompetitionServiceImpl();
 
 	public void generatePlayers() {
-		int totalPlayers = 15;
-		competitionService.generateCompetition("hackaton-2016",
+		int totalPlayers = 8;
+		competitionService.generateCompetition("hackaton-2023",
 				rangeClosed(1, totalPlayers).mapToObj(i -> "dummy_" + i).collect(toList()));
 	}
 	@Test
 	public void addPlayers() {
-		competitionService.generateCompetition("hackaton-2016",
+		competitionService.generateCompetition("hackaton-2023",
 				asList(
-						"abi", "acko", "bn140314d", "dux", "ks",
-						"lemibot", "m_markobot", "milosk", "mladen_brankovic", "mv_bot", 
-						"nikola_jovanovic", "petja", "Vesna", "vs", "walama"));
+						"djomla", "acko", "bn140314d", "dux", "ks",
+						"lemibot", "m_markobot","mladen_brankovic"));
 	}
-	
+	@Test
 	public void runGroupPhase() {
 		runMatches(null, GROUP);
 	}
-
+	@Test
 	public void runQuarterFinal() {
 		runMatches(GROUP, QUARTER_FINAL);
 	}
-	
+	@Test
 	public void runSemiFinal() {
 		runMatches(QUARTER_FINAL, SEMI_FINAL);
 	}
-
+	@Test
 	public void runThirdPlace() {
 		runMatches(SEMI_FINAL, THIRD_PLACE);
 	}

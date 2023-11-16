@@ -19,7 +19,7 @@ public class CompetitionServiceTest {
 	@Test
 	public void testTournament() {
 		int totalPlayers = 16;
-		competitionService.generateCompetition("hackaton-2016",
+		competitionService.generateCompetition("hackaton-2023",
 				rangeClosed(1, totalPlayers).mapToObj(i -> "dummy_" + i).collect(toList()));
 		
 		logger.debug("===== Group phase ====== ");

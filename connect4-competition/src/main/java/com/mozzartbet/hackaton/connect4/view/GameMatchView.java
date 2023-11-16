@@ -126,8 +126,8 @@ public class GameMatchView {
 	final ScheduledExecutorService scheduler = newScheduledThreadPool(2);
 
 	protected void scheduleRefresh() {
-		scheduler.scheduleWithFixedDelay(new RefreshCurrent(), 2000, 100, MILLISECONDS);
-		scheduler.scheduleWithFixedDelay(new RefreshAvailable(), 1000, 500, MILLISECONDS);
+		scheduler.scheduleWithFixedDelay(new RefreshCurrent(), 2000, 10, MILLISECONDS);
+		scheduler.scheduleWithFixedDelay(new RefreshAvailable(), 1000, 50, MILLISECONDS);
 	}
 
 	class RefreshCurrent implements Runnable {

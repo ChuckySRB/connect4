@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 
+import com.mozzartbet.hackaton.connect4.util.ThreadHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +47,7 @@ public class BotGameExecutor implements GameExecutor {
 				game.end(WINNER_TWO);
 				return game;
 			}
+			ThreadHelper.sleep(1500);
 
 			if (board.isGameOver()) {
 				break;
@@ -55,6 +57,7 @@ public class BotGameExecutor implements GameExecutor {
 				game.end(WINNER_ONE);
 				return game;
 			}
+			ThreadHelper.sleep(1500);
 		} while (!board.isGameOver());
 
 		int winner = board.getWinner();
