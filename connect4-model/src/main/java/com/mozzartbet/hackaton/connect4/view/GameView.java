@@ -19,13 +19,14 @@ import javax.swing.SwingUtilities;
 import com.mozzartbet.hackaton.connect4.bot.example.DummyPlayer;
 import com.mozzartbet.hackaton.connect4.model.GameBoard;
 import com.mozzartbet.hackaton.connect4.model.Player;
+import com.mozzartbet.hackaton.connect4.teamname.Bot;
 
 public class GameView {
 
 	final GameBoard board;
 	final DisplayedBoard displayedBoard;
 
-	final Player computer = new DummyPlayer();
+	final Player computer = new Bot();
 
 	//
 

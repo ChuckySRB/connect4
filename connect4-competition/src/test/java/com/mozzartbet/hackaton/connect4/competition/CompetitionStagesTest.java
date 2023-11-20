@@ -28,8 +28,8 @@ public class CompetitionStagesTest {
 	public void addPlayers() {
 		competitionService.generateCompetition("hackaton-2023",
 				asList(
-						"djomla", "acko", "bn140314d", "dux", "ks",
-						"lemibot", "m_markobot","mladen_brankovic"));
+						"walama", "Vesna", "acko", "dux", "ks",
+						"vs", "petja","bn140314d"));
 	}
 	@Test
 	public void runGroupPhase() {

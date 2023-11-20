@@ -91,7 +91,7 @@ public class Match {
 		}
 
 		Game next = lastGame();
-		if (next.winner() == null) {
+		if (next.winner() == null && next.outcome != DRAW) {
 			return next;
 		}
 
