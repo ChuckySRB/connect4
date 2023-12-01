@@ -36,7 +36,7 @@ public class Bot extends Player {
                 gain = -miniMax;
             }
             else if(nextMoves.size() == 0) {
-                gain = gainLogic();;
+                gain = gainLogic(3-gameBoard.getLastCounterPlaced(), gameBoard);;
             }
             else {
                 gain = -miniMax;
@@ -74,9 +74,66 @@ public class Bot extends Player {
                 return Math.max(value, gain);
             }
         }
-        public float gainLogic(){
-            
-            return 0;
+
+        public float evaluateBoxInner(int currentPlayer){
+            int boardMatrix [][]= gameBoard.getBoard();
+            float cnt = 0;
+            for (int j=0; j<GameConsts.ROWS; j++){
+                for (int i = 3; i <=4; i++){
+                    if (boardMatrix[j][i] == currentPlayer)
+                        cnt++;
+                    else if (boardMatrix[j][i] != 0){
+                        cnt--;
+                    }
+                }
+            }
+            cnt = cnt*miniMax/3;
+            return Math.min(1.0f, Math.max(-1.0f, cnt));
+        }
+
+        public float evaluateBoxOuter(int currentPlayer){
+            int boardMatrix [][]= gameBoard.getBoard();
+            float cnt = 0;
+            for (int j=0; j<GameConsts.ROWS; j++){
+                for (int i = 2; i <=5; i++){
+                    if (boardMatrix[j][i] == currentPlayer)
+                        cnt++;
+                    else if (boardMatrix[j][i] != 0){
+                        cnt--;
+                    }
+                }
+            }
+            cnt = cnt*miniMax/5;
+            return Math.min(1.0f, Math.max(-1.0f, cnt));
+        }
+
+        public float evaluateLevel(){
+
+            float eval = (float) (1 - gameBoard.getLastMove().getRow()*0.1);
+            return miniMax*eval;
+        }
+
+        public float gainLogic(int currentPlayer, GameBoard board) {
+            // Check for winning states
+
+            if (board.getWinner() == currentPlayer) {
+                return 1.0f;
+            } else if (board.getWinner() == 3-currentPlayer) {
+                return -1.0f;
+            }
+
+            // Check for the number of winning positions for both players
+            float middleBoxEvaluation = (float)(evaluateBoxInner(currentPlayer) * 0.2  + evaluateBoxOuter(currentPlayer) * 0.1);
+
+            //
+            float levelEvaluation = (float)(evaluateLevel()*0.1);
+            // Combine factors to get an overall evaluation
+            float evaluation = 0;
+            evaluation += middleBoxEvaluation;
+            evaluation += levelEvaluation;
+
+            // Normalize the evaluation to be between -1 and 1
+            return Math.min(1.0f, Math.max(-1.0f, evaluation));
         }
 
         public float getGain(){
@@ -128,7 +185,7 @@ public class Bot extends Player {
 
     @Override
     public void configure(long timeoutMillis) {
-
+        gameBoard.reset();
     }
 
     @Override
