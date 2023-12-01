@@ -6,6 +6,9 @@ import com.mozzartbet.hackaton.connect4.model.Player;
 public class Bot extends Player {
 
     private GameBoard gameBoard;
+
+    private int time_needed;
+
     @Override
     public void configure(long timeoutMillis) {
 
@@ -13,7 +16,7 @@ public class Bot extends Player {
 
     @Override
     public void move() {
-
+        move = 2;
     }
 
     @Override
