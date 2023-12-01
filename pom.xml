@@ -9,7 +9,7 @@
 
 	<modules>
 		<module>connect4-model</module>
-		<module>connect4-competition</module>
+
 	</modules>
 
 	<build>

@@ -16,10 +16,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import com.mozzartbet.hackaton.connect4.bot.example.DummyPlayer;
 import com.mozzartbet.hackaton.connect4.model.GameBoard;
 import com.mozzartbet.hackaton.connect4.model.Player;
-import com.mozzartbet.hackaton.connect4.teamname.Bot;
+import com.mozzartbet.hackaton.connect4.poluprovodnici.Bot;
 
 public class GameView {
 
