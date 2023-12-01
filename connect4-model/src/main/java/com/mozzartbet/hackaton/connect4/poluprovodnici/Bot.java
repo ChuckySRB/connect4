@@ -298,6 +298,26 @@ public class Bot extends Player {
         return root;
     }
 
+    public int getDepth(){
+        float chips = gameBoard.getCountersPlaced();
+        float total_chips = GameConsts.ROWS * GameConsts.COLUMNS;
+        float precentage = chips/total_chips*100;
+
+        if (precentage < 25){
+            return 5;
+        }
+        else if (precentage < 80){
+            return 6;
+        }
+
+        else if (precentage < 90){
+            return 7;
+        }
+
+        else
+            return 8;
+    }
+
     @Override
     public void configure(long timeoutMillis) {
         gameBoard.reset();
@@ -305,7 +325,8 @@ public class Bot extends Player {
 
     @Override
     public void move() {
-        MiniMaxNode root = makeTree(this.searchDepth);
+        System.out.println(getDepth());
+        MiniMaxNode root = makeTree(getDepth());
         float gain =root.calculateGain();
         move = root.getNextMove();
         gameBoard.placeCounter(move, 3-gameBoard.getLastCounterPlaced());
@@ -322,10 +343,14 @@ public class Bot extends Player {
     @Override
     public void opponentMove(int move) {
         gameBoard.placeCounter(move, 3 - gameBoard.getLastCounterPlaced());
+        if (gameBoard.isGameOver()){
+            gameBoard.reset();
+
+        }
     }
 
     @Override
     public void finished(int winner) {
-
+        gameBoard.reset();
     }
 }
