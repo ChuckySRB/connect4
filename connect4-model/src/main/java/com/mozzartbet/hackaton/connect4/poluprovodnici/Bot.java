@@ -26,14 +26,14 @@ public class Bot extends Player {
             miniMax = minimax;
             gameBoard = bord;
             nextMoves = new ArrayList<MiniMaxNode>();
-            move = 0;
+            move = 4;
 
         }
 
         public float calculateGain(){
 
             if (gameBoard.isGameOver()) {
-                gain = miniMax;
+                gain = -miniMax;
             }
             else if(nextMoves.size() == 0) {
                 gain = gainLogic();;
@@ -42,11 +42,11 @@ public class Bot extends Player {
                 gain = -miniMax;
                 int nextN = nextMoves.size();
                 for (int i = 0; i < nextN; i++){
-                    float nextGain = nextMoves.get(i).calculateGain();
+                    float nextGain = miniMaxGain(nextMoves.get(i).calculateGain());
                     if (nextGain != gain){
                         move = nextMoves.get(i).getCurrentMove();
                     }
-                    gain = miniMaxGain(nextGain);
+                    gain = nextGain;
                 }
             }
             return gain;
@@ -94,7 +94,7 @@ public class Bot extends Player {
 
 
 
-    private int searchDepth = 5;
+    private int searchDepth = 6;
     private GameBoard gameBoard;
 
     private int time_needed;
@@ -130,7 +130,7 @@ public class Bot extends Player {
 
     @Override
     public void move() {
-        MiniMaxNode root = makeTree(4);
+        MiniMaxNode root = makeTree(this.searchDepth);
         float gain =root.calculateGain();
         move = root.getNextMove();
         gameBoard.placeCounter(move, 3-gameBoard.getLastCounterPlaced());
