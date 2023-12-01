@@ -18,7 +18,7 @@ public class Bot extends Player {
 
         private float gain;
 
-        private int move;
+        private int moveMini;
 
         public ArrayList<MiniMaxNode> nextMoves;
 
@@ -26,7 +26,7 @@ public class Bot extends Player {
             miniMax = minimax;
             gameBoard = bord;
             nextMoves = new ArrayList<MiniMaxNode>();
-            move = 4;
+            moveMini = 4;
 
         }
 
@@ -44,7 +44,7 @@ public class Bot extends Player {
                 for (int i = 0; i < nextN; i++){
                     float nextGain = miniMaxGain(nextMoves.get(i).calculateGain());
                     if (nextGain != gain){
-                        move = nextMoves.get(i).getCurrentMove();
+                        moveMini = nextMoves.get(i).getCurrentMove();
                     }
                     gain = nextGain;
                 }
@@ -53,7 +53,7 @@ public class Bot extends Player {
         }
 
         public int getNextMove(){
-            return move;
+            return moveMini;
         }
 
         public MiniMaxNode getOneMOve(int index){
@@ -75,6 +75,7 @@ public class Bot extends Player {
             }
         }
         public float gainLogic(){
+            
             return 0;
         }
 
@@ -83,6 +84,8 @@ public class Bot extends Player {
         }
 
         public boolean addMove(int counter, int col){
+            if (this.gameBoard.isGameOver())
+                return false;
             GameBoard newMove = gameBoard.deepCopy();
             boolean legal  = newMove.placeCounter(col, counter);
             if (legal)
@@ -104,7 +107,7 @@ public class Bot extends Player {
     }
 
     public MiniMaxNode makeTree(int depth){
-        MiniMaxNode root = new MiniMaxNode(1, gameBoard);
+        MiniMaxNode root = new MiniMaxNode(1, gameBoard.deepCopy());
         ArrayList<MiniMaxNode> nodes = new ArrayList<MiniMaxNode>();
         nodes.add(root);
         for (int i = 0; i < depth; i++){
