@@ -10,8 +10,14 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Stack;
 
+/**
+ * The Bot class represents a bot player in a game. It extends the Player class.
+ */
 public class Bot extends Player {
 
+    /**
+     * Represents a node in the MiniMax tree for the Connect 4 game.
+     */
     private class MiniMaxNode {
         private GameBoard gameBoard;
         private int miniMax;
@@ -30,24 +36,28 @@ public class Bot extends Player {
 
         }
 
-        public float calculateGain(){
-
+        public float calculateGain() {
             if (gameBoard.isGameOver()) {
                 gain = -miniMax;
             }
-            else if(nextMoves.size() == 0) {
-                gain = gainLogic(3-gameBoard.getLastCounterPlaced(), gameBoard);;
+            else if (nextMoves.size() == 0) {
+                gain = gainLogic(3 - gameBoard.getLastCounterPlaced(), gameBoard);
             }
             else {
-                gain = -miniMax;
-                int nextN = nextMoves.size();
-                for (int i = 0; i < nextN; i++){
-                    float nextGain = miniMaxGain(nextMoves.get(i).calculateGain());
-                    if (nextGain != gain){
-                        moveMini = nextMoves.get(i).getCurrentMove();
-                    }
-                    gain = nextGain;
+                gain = calculateNextMoveGain();
+            }
+            return gain;
+        }
+
+        private float calculateNextMoveGain() {
+            gain = -miniMax;
+            int numberOfNextMoves = nextMoves.size();
+            for (int i = 0; i < numberOfNextMoves; i++) {
+                float nextGain = miniMaxGain(nextMoves.get(i).calculateGain());
+                if (nextGain != gain) {
+                    moveMini = nextMoves.get(i).getCurrentMove();
                 }
+                gain = nextGain;
             }
             return gain;
         }
@@ -75,6 +85,12 @@ public class Bot extends Player {
             }
         }
 
+        /**
+         * Evaluates the inner box for a given player.
+         *
+         * @param currentPlayer  the player's ID (1 or 2)
+         * @return the evaluation score for the inner box,  a value between -1.0 and 1.0
+         */
         public float evaluateBoxInner(int currentPlayer){
             int boardMatrix [][]= gameBoard.getBoard();
             float cnt = 0;
@@ -91,6 +107,12 @@ public class Bot extends Player {
             return Math.min(1.0f, Math.max(-1.0f, cnt));
         }
 
+        /**
+         * Evaluates the outer boxes of the game board for the specified player.
+         *
+         * @param currentPlayer the player to evaluate the outer boxes for
+         * @return the evaluation value of the outer boxes, between -1.0 and 1.0
+         */
         public float evaluateBoxOuter(int currentPlayer){
             int boardMatrix [][]= gameBoard.getBoard();
             float cnt = 0;
@@ -107,12 +129,25 @@ public class Bot extends Player {
             return Math.min(1.0f, Math.max(-1.0f, cnt));
         }
 
+        /**
+         * Evaluates the level of the game based on the last move in the game board.
+         * The level is calculated by multiplying the last move's row number by 0.1 and subtracting it from 1.
+         * The result is then multiplied by the miniMax value.
+         *
+         * @return the evaluated level of the game
+         */
         public float evaluateLevel(){
 
             float eval = (float) (1 - gameBoard.getLastMove().getRow()*0.1);
             return miniMax*eval;
         }
 
+        /**
+         * Evaluates the current chain of pieces for the given player.
+         *
+         * @param currentPlayer the player whose chain is evaluated
+         * @return the evaluation value of the chain
+         */
         public float evaluateChain(int currentPlayer){
 
             float eval = (float) 0;
@@ -150,9 +185,43 @@ public class Bot extends Player {
 
             num *=factor;
 
+            eval += num/6;
             num = 0;
             factor = 0;
-            // gledaj horizont
+
+            // gledaj vertikalu
+            for (int cRow = row-1; cRow > 0; cRow--){
+                if(boardMatrix[cRow][column] == currentPlayer){
+                    num++;
+                }
+                else if (boardMatrix[cRow][column] == 0){
+                    factor++;
+                    break;
+                }
+                else{
+                    break;
+                }
+            }
+            for (int cRow = row+1; cRow < GameConsts.ROWS; cRow++){
+                if(boardMatrix[cRow][column] == currentPlayer){
+                    num++;
+                }
+                else if (boardMatrix[cRow][column] == 0){
+                    factor++;
+                    break;
+                }
+                else{
+                    break;
+                }
+            }
+
+            num *=factor;
+
+            eval += num/6;
+            num = 0;
+            factor = 0;
+
+            // gledaj diajgonalu /
             for (int cColumn = column-1, cRow = row-1; cColumn > 0 && cRow > 0; cColumn--, cRow--){
                 if(boardMatrix[cRow][cColumn] == currentPlayer){
                     num++;
@@ -176,13 +245,14 @@ public class Bot extends Player {
                 }
 
             }
-                num *=factor;
+            num *=factor;
 
             eval += num/6;
 
             num = 0;
             factor = 0;
-            // gledaj horizont
+
+            // gledaj Dijagonalu \
             for (int cColumn = column+1, cRow = row-1; cColumn < GameConsts.COLUMNS && cRow > 0; cColumn++, cRow--){
                 if(boardMatrix[cRow][cColumn] == currentPlayer){
                     num++;
@@ -209,22 +279,24 @@ public class Bot extends Player {
             }
 
 
-                num *=factor;
+            num *=factor;
 
-                eval += num/6;
+            eval += num/6;
 
-                // gledaj vertikala
 
-                // gledaj /
+            eval = Math.min(1.0f, Math.max(-1.0f, eval/4));
 
-                // gledaj \
+            return miniMax*eval;
 
-                eval = Math.min(1.0f, Math.max(-1.0f, eval/3));
+        }
 
-                return miniMax*eval;
-
-            }
-
+        /**
+         * Calculates the gain for a player in the current game state.
+         *
+         * @param currentPlayer the player for whom to calculate the gain
+         * @param board the game board representing the current state of the game
+         * @return the calculated gain for the currentPlayer, normalized to be between -1 and 1
+         */
         public float gainLogic(int currentPlayer, GameBoard board) {
             // Check for winning states
 
